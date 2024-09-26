@@ -2,11 +2,28 @@
 var player1, player2;
 
 function onYouTubeIframeAPIReady() {
+  // This function is called by the YouTube API when it's ready
+  setupYouTubeEventListeners();
+}
+
+function setupYouTubeEventListeners() {
   document.addEventListener("click", function (event) {
     if (event.target.id === "openmodal1") {
       handleModalOpen("player1", "scIZq2PPzU0");
     } else if (event.target.id === "openmodal2") {
       handleModalOpen("player2", "SKcxYIl-tT8");
+    }
+  });
+
+  document.addEventListener("click", function (event) {
+    if (event.target.closest("#modal1 .close-button-wrapper")) {
+      if (player1) {
+        player1.pauseVideo();
+      }
+    } else if (event.target.closest("#modal2 .close-button-wrapper")) {
+      if (player2) {
+        player2.pauseVideo();
+      }
     }
   });
 }
@@ -38,17 +55,16 @@ function onPlayerReady(event) {
   event.target.playVideo();
 }
 
-document.addEventListener("click", function (event) {
-  if (event.target.closest("#modal1 .close-button-wrapper")) {
-    if (player1) {
-      player1.pauseVideo();
-    }
-  } else if (event.target.closest("#modal2 .close-button-wrapper")) {
-    if (player2) {
-      player2.pauseVideo();
-    }
-  }
-});
+// Load YouTube API
+function loadYouTubeAPI() {
+  var tag = document.createElement("script");
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName("script")[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+
+// Call this function to load the YouTube API
+loadYouTubeAPI();
 
 //Form Input Labels
 // $(".form-input").on("focusin", function () {

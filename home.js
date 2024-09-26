@@ -42,6 +42,7 @@ function handleModalOpen(playerId, videoId) {
         videoId: videoId,
         playerVars: {
           rel: 0,
+          modestbranding: 1,
           autoplay: 1,
           start: playerId === "player1" ? lastTime1 : lastTime2,
         },

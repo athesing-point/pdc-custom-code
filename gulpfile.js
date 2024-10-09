@@ -10,11 +10,14 @@ function minify() {
     .pipe(gulpIf("*.css", cleanCSS()))
     .pipe(gulpIf("*.js", terser()))
     .pipe(rename({ suffix: ".min" }))
-    .pipe(gulp.dest("."));
+    .pipe(gulp.dest("./min"));
 }
 
 function watch() {
-  gulp.watch(["**/*.css", "**/*.js", "!**/*.min.*", "!node_modules/**"], minify);
+  gulp.watch(
+    ["**/*.css", "**/*.js", "!**/*.min.*", "!node_modules/**"],
+    minify
+  );
 }
 
 exports.default = watch;

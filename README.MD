@@ -20,3 +20,17 @@ Each folder corresponds to a specific page or feature on Point.com where the cod
 ## Deployment
 
 [Add information about how this code is deployed to Point.com]
+
+## Setup auto minification of js and css files.
+
+Run the following command to install the dependencies:
+
+```
+npm install --save-dev gulp gulp-rename gulp-clean-css gulp-terser gulp-ifc
+```
+
+And then run the following command to start the process that minfies on save:
+
+```
+npx gulp
+```

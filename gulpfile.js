@@ -6,7 +6,17 @@ const gulpIf = require("gulp-if");
 
 function minify() {
   return gulp
-    .src(["**/*.css", "**/*.js", "!**/*.min.*", "!node_modules/**"])
+    .src([
+      "**/*.css",
+      "**/*.js",
+      "!**/*.min.*",
+      "!node_modules/**",
+      "!gulpfile.js",
+      "!.prettierrc",
+      "!.prettierignore",
+      "!package.json",
+      "!package-lock.json",
+    ])
     .pipe(gulpIf("*.css", cleanCSS()))
     .pipe(gulpIf("*.js", terser()))
     .pipe(rename({ suffix: ".min" }))
@@ -15,7 +25,17 @@ function minify() {
 
 function watch() {
   gulp.watch(
-    ["**/*.css", "**/*.js", "!**/*.min.*", "!node_modules/**"],
+    [
+      "**/*.css",
+      "**/*.js",
+      "!**/*.min.*",
+      "!node_modules/**",
+      "!gulpfile.js",
+      "!.prettierrc",
+      "!.prettierignore",
+      "!package.json",
+      "!package-lock.json",
+    ],
     minify
   );
 }

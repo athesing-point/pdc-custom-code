@@ -176,7 +176,6 @@ function initFAQSchema() {
     document.head.appendChild(script);
   }
 }
-
 // These functions will be called when the script is loaded
 initAccordions();
 initFAQSchema();

@@ -22,8 +22,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("wf-form-EmailCap-Form");
 
   const validateEmailInput = () => {
-    const isValid = !emailInput.value || emailRegex.test(emailInput.value.toLowerCase());
-    emailInput.setCustomValidity(isValid ? "" : "Please enter a valid email address.");
+    const isValid =
+      !emailInput.value || emailRegex.test(emailInput.value.toLowerCase());
+    emailInput.setCustomValidity(
+      isValid ? "" : "Please enter a valid email address."
+    );
     return isValid;
   };
 
@@ -39,17 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const faqPage = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": Array.from(faqList.querySelectorAll(".w-dyn-item"))
+      mainEntity: Array.from(faqList.querySelectorAll(".w-dyn-item"))
         .map((item) => {
           const question = item.querySelector(".faq_q");
           const answer = item.querySelector(".faq_answer");
           return question && answer
             ? {
                 "@type": "Question",
-                "name": question.textContent.trim(),
-                "acceptedAnswer": {
+                name: question.textContent.trim(),
+                acceptedAnswer: {
                   "@type": "Answer",
-                  "text": answer.textContent.trim(),
+                  text: answer.textContent.trim(),
                 },
               }
             : null;
@@ -65,7 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Accordion Accessibility Handling
   const toggleAttrVal = (element, attr, val1, val2) => {
-    element.setAttribute(attr, element.getAttribute(attr) === val1 ? val2 : val1);
+    element.setAttribute(
+      attr,
+      element.getAttribute(attr) === val1 ? val2 : val1
+    );
   };
 
   document.querySelectorAll(".accordion-trigger").forEach((button) => {
@@ -78,20 +84,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     button.addEventListener("click", () => {
       toggleAttrVal(button, "aria-expanded", "false", "true");
-      toggleAttrVal(button.parentNode.querySelector(".accordion-content"), "aria-hidden", "true", "false");
+      toggleAttrVal(
+        button.parentNode.querySelector(".accordion-content"),
+        "aria-hidden",
+        "true",
+        "false"
+      );
     });
   });
 
   // Footnote Links
   const footnotesRTF = document.querySelector(".blog-rich-text-footnotes");
-  if (footnotesRTF?.textContent.trim() && getComputedStyle(footnotesRTF).display !== "none" && getComputedStyle(footnotesRTF).visibility !== "hidden") {
-    document.querySelectorAll(".blog-rich-text:not(.blog-rich-text-footnotes) sup").forEach((sup) => {
-      if (!isNaN(sup.textContent.trim())) {
-        sup.innerHTML = `<a href="#footnotes">${sup.textContent}</a>`;
-      }
-    });
+  if (
+    footnotesRTF?.textContent.trim() &&
+    getComputedStyle(footnotesRTF).display !== "none" &&
+    getComputedStyle(footnotesRTF).visibility !== "hidden"
+  ) {
+    document
+      .querySelectorAll(".blog-rich-text:not(.blog-rich-text-footnotes) sup")
+      .forEach((sup) => {
+        if (!isNaN(sup.textContent.trim())) {
+          sup.innerHTML = `<a href="#footnotes">${sup.textContent}</a>`;
+        }
+      });
   }
 
   // Open all RTF links in new tab/_blank
-  document.querySelectorAll(".blog-rich-text a, .rtf-content_series a").forEach((link) => (link.target = "_blank"));
+  document
+    .querySelectorAll(".blog-rich-text a, .rtf-content_series a")
+    .forEach((link) => (link.target = "_blank"));
 });

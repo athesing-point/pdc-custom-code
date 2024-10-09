@@ -1,3 +1,6 @@
+/* ---------------------Repo Here:---------------------- */
+
+/* ---------------------GLOBAL STYLES---------------------- */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -51,7 +54,7 @@ body {
  * - gray2: #e0e4eb
  * - gray3: #999999
  * - gray4: #707475
- * - purpleblue-white: #8E9EB8 (background) with white checkmark
+ * - c-purpleblue-white: #8E9EB8 (background) with white checkmark
  * - c-yorange-white: #F4C65D (background) with white checkmark
  * - c-pointblack-white: #444444 (background) with white checkmark
  *
@@ -142,7 +145,7 @@ body {
 /* [Circle BG]-[Checkmark] color scheme */
 
 /* Existing styles for purpleblue-white checkmark */
-.rtf-checklists[check="purpleblue-white"] ul li::before {
+.rtf-checklists[check="c-purpleblue-white"] ul li::before {
   background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M20%2010C20%2015.5228%2015.5228%2020%2010%2020C4.47715%2020%200%2015.5228%200%2010C0%204.47715%204.47715%200%2010%200C15.5228%200%2020%204.47715%2020%2010Z%22%20fill%3D%22%238E9EB8%22%2F%3E%3Cpath%20d%3D%22M5.71484%2010.3174L8.69621%2012.8571L14.2863%207.14282%22%20stroke%3D%22white%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%2F%3E%3C%2Fsvg%3E");
 }
 
@@ -179,6 +182,33 @@ body {
 }
 .rtf-checklists[li-gap="1.5rem"] ul li {
   margin-bottom: 1.5rem;
+}
+
+/* Custom sizes using check-size attribute */
+.rtf-checklists[check-size="1rem"] ul li::before {
+  width: 1rem;
+  height: 1rem;
+  min-width: 1rem;
+}
+.rtf-checklists[check-size="1.25rem"] ul li::before {
+  width: 1.25rem;
+  height: 1.25rem;
+  min-width: 1.25rem;
+}
+.rtf-checklists[check-size="1.5rem"] ul li::before {
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: 1.5rem;
+}
+.rtf-checklists[check-size="1.75rem"] ul li::before {
+  width: 1.75rem;
+  height: 1.75rem;
+  min-width: 1.75rem;
+}
+.rtf-checklists[check-size="2rem"] ul li::before {
+  width: 2rem;
+  height: 2rem;
+  min-width: 2rem;
 }
 
 /* Ensure the last item doesn't have a bottom margin */

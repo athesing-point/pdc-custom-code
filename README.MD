@@ -9,28 +9,22 @@ Each folder corresponds to a specific page or feature on Point.com where the cod
 - `/blog`: Custom code for the blog or blog post pages
 - ...
 
-## Usage
+## Setup and Usage
 
-[Add brief instructions on how to use or integrate this code with Point.com]
+### Install dependencies
 
-## Contributing
-
-[Add guidelines for contributing to this repository]
-
-## Deployment
-
-[Add information about how this code is deployed to Point.com]
-
-## Setup auto minification of js and css files.
-
-Run the following command to install the dependencies:
+Run the following command to install the required dependencies:
 
 ```
 npm install --save-dev gulp gulp-rename gulp-clean-css gulp-terser gulp-ifc
 ```
 
-And then run the following command to start the process that minfies on save:
+### Auto minification of js and css files
+
+To start the process that minifies files on save, run:
 
 ```
 npx gulp
 ```
+
+The files will be minified and saved in the `min` folder.

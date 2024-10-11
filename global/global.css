@@ -92,8 +92,8 @@ a {
   line-clamp: 2;
 }
 
-/* ---------------------------------- RTF Checklists ---------------------------------- */
-
+/* ---------------------------------- RTF Checklists -> Colors ---------------------------------- */
+/* Default Color for Checkmarks */
 .rtf-checklists ul li {
   background-repeat: no-repeat;
   background-position: 0 2px;
@@ -123,6 +123,7 @@ a {
 .rtf-checklists[check="blue"] ul li {
   background-image: url("https://cdn.prod.website-files.com/62fb9110be019f3cf956c118/67084d1ea5206d2fd337bbf2_check-blue.svg");
 
+  /* ---------------------------------- RTF Checklists -> List Item Gaps ---------------------------------- */
   .rtf-checklists[li-gap="0.25rem"] ul li {
     margin-bottom: 0.25rem;
   }
@@ -148,6 +149,8 @@ a {
     margin-bottom: 2rem;
   }
 }
+
+/* ---------------------------------- RTF Checklists -> remove bottom margin from last list item ---------------------------------- */
 .rtf-checklists ul li:last-child {
   margin-bottom: 0 !important;
 }

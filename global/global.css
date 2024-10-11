@@ -97,8 +97,18 @@ a {
 .rtf-checklists ul li {
   background-repeat: no-repeat;
   background-position: 0 2px;
+}
+
+/* Set black as default */
+.rtf-checklists:not([check]) ul li,
+.rtf-checklists[check="black"] ul li {
   background-image: url("https://cdn.prod.website-files.com/62fb9110be019f3cf956c118/67084d1e5b4c04a92bcf38e3_check-black.svg");
 }
+
+.rtf-checklists[check="c-black-white"] ul li {
+  background-image: url("https://cdn.prod.website-files.com/62fb9110be019f3cf956c118/670815c5ca6d639e804eae2c_check-black-white.svg");
+}
+
 .rtf-checklists[check="c-yorange-white"] ul li {
   background-image: url("https://cdn.prod.website-files.com/62fb9110be019f3cf956c118/670815c5c932f9cd9055c59b_check-yorange-white.svg");
 }

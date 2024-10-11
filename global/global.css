@@ -16,7 +16,11 @@ sup {
   left: 0.11em;
 }
 body {
+  -webkit-overscroll-behavior: none;
+  -ms-overscroll-behavior: none;
   overscroll-behavior: none;
+  -webkit-overscroll-behavior-y: none;
+  -ms-overscroll-behavior-y: none;
   overscroll-behavior-y: none;
 }
 .overflow-clip {
@@ -67,17 +71,25 @@ a {
 }
 
 /* Text truncation styles */
-.text-style-3lines {
-  display: -webkit-box;
-  overflow: hidden;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-}
+.text-style-3lines,
 .text-style-2lines {
   display: -webkit-box;
+  display: -ms-flexbox;
+  display: box;
   overflow: hidden;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  box-orient: vertical;
+}
+.text-style-3lines {
+  -webkit-line-clamp: 3;
+  -ms-line-clamp: 3;
+  line-clamp: 3;
+}
+.text-style-2lines {
+  -webkit-line-clamp: 2;
+  -ms-line-clamp: 2;
+  line-clamp: 2;
 }
 
 /* ---------------------------------- RTF Checklists ---------------------------------- */

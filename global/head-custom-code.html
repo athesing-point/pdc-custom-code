@@ -1,0 +1,97 @@
+<link
+  rel="preload"
+  href="//transcend-cdn.com/cm/783c6dfa-dd83-4431-8047-e3a521ffa71a/airgap.js"
+  as="script"
+/>
+<link rel="dns-prefetch" href="//cdn.prod.website-files.com" />
+<link rel="preconnect" href="//cdn.jsdelivr.net" as="script" />
+<link rel="preconnect" href="//w.chatlio.com" />
+<link rel="preconnect" href="//app.posthog.com" />
+<link rel="preconnect" href="//www.googletagmanager.com" />
+
+<script
+  fetchpriority="high"
+  data-cfasync="false"
+  data-prompt="auto"
+  src="https://transcend-cdn.com/cm/783c6dfa-dd83-4431-8047-e3a521ffa71a/airgap.js"
+></script>
+
+<!-- Check to ensure proper version of posthog is being loaded before a deploy -->
+
+<!-- Prod Posthog-->
+<script>
+  !(function (t, e) {
+    var o, n, p, r;
+    e.__SV ||
+      ((window.posthog = e),
+      (e._i = []),
+      (e.init = function (i, s, a) {
+        function g(t, e) {
+          var o = e.split(".");
+          2 == o.length && ((t = t[o[0]]), (e = o[1])),
+            (t[e] = function () {
+              t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+            });
+        }
+        ((p = t.createElement("script")).type = "text/javascript"),
+          (p.async = !0),
+          (p.src = s.api_host + "/static/array.js"),
+          (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+            p,
+            r
+          );
+        var u = e;
+        for (
+          void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+            u.people = u.people || [],
+            u.toString = function (t) {
+              var e = "posthog";
+              return (
+                "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+              );
+            },
+            u.people.toString = function () {
+              return u.toString(1) + ".people (stub)";
+            },
+            o =
+              "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys".split(
+                " "
+              ),
+            n = 0;
+          n < o.length;
+          n++
+        )
+          g(u, o[n]);
+        e._i.push([i, s, a]);
+      }),
+      (e.__SV = 1));
+  })(document, window.posthog || []);
+  posthog.init("phc_xJEaj6NvK5QPhXzkeUhK7cgtisovAEKhkvlC6kAuuXP", {
+    api_host: "https://app.posthog.com",
+  });
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: "posthogLoaded" });
+</script>
+
+<!--Staging Posthog-->
+<!--
+<script>
+    !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    posthog.init('phc_8gMFcMkOkP82Urblkl7oFmgWc0AOyZXkDN5fc1uqnbV',{api_host:'https://app.posthog.com'})
+</script>
+<script>
+    window.dispatchEvent(new Event('posthog_loaded'));
+</script>
+-->
+<meta name="format-detection" content="telephone=no" />
+<style>
+  /* set navbar to zero opacity until js has loaded */
+  .navbar_component_updated {
+    opacity: 0;
+  }
+  /* set toast to zero opacity until js has loaded */
+  .nav-toast {
+    opacity: 0;
+  }
+</style>

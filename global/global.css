@@ -96,7 +96,9 @@ a {
 /* Default Color for Checkmarks */
 .rtf-checklists ul li {
   background-repeat: no-repeat;
-  background-position: 0 2px;
+  background-position: 0 0.2rem;
+  background-size: 1.2rem;
+  /* padding-left: 1.5rem; */
 }
 
 /* Set black as default */
@@ -135,7 +137,7 @@ a {
 }
 
 /* ---------------------------------- RTF Checklists -> List Item Gaps ---------------------------------- */
-.rtf-checklists[li-gap="0.25rem"] ul li {
+/* .rtf-checklists[li-gap="0.25rem"] ul li {
   margin-bottom: 0.25rem;
 }
 .rtf-checklists[li-gap="0.5rem"] ul li {
@@ -162,4 +164,13 @@ a {
 
 .rtf-checklists ul li:last-child {
   margin-bottom: 0 !important;
+} */
+
+/* Tablet and Mobile breakpoints */
+@media screen and (max-width: 991px) {
+  .rtf-checklists ul li {
+    background-size: 0.75rem;
+    background-position: 0 0.25rem;
+    padding-left: 1.25rem;
+  }
 }

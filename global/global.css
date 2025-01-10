@@ -135,6 +135,9 @@ a {
 .rtf-checklists[check="blue"] ul li {
   background-image: url("https://cdn.prod.website-files.com/62fb9110be019f3cf956c118/67084d1ea5206d2fd337bbf2_check-blue.svg");
 }
+.rtf-checklists[check="moneylion"] ul li {
+  background-image: url("https://cdn.prod.website-files.com/62fb9110be019f3cf956c118/67815b4a72ea45ff29c66931_c-moneylion.svg");
+}
 
 /* ---------------------------------- RTF Checklists -> List Item Gaps ---------------------------------- */
 /* .rtf-checklists[li-gap="0.25rem"] ul li {

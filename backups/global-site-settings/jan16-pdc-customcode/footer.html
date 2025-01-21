@@ -1,0 +1,70 @@
+<!-- Global Nav -->
+<script
+  async
+  src="https://cdn.jsdelivr.net/gh/athesing-point/pdc-nav@547f8114/src/nav-states.min.js"
+></script>
+<!-- Posthog Custom Events -->
+<script>
+  // Posthog Custom Identify via Form Submission
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get all email input fields on the page
+    var emailFields = document.querySelectorAll('input[type="email"]');
+
+    if (emailFields.length === 0) {
+      console.log("No matching input found.");
+      return;
+    }
+
+    emailFields.forEach(function (emailField) {
+      // Find the form that contains this email input field
+      var form = emailField.closest("form");
+
+      if (form) {
+        console.log("Matching input field found in form");
+
+        form.addEventListener("submit", function (event) {
+          //event.preventDefault();
+
+          var email = emailField.value;
+
+          posthog.identify(email, {
+            email: email,
+          });
+
+          posthog.capture("user identified by email", {
+            email: email,
+          });
+        });
+      } else {
+        console.log("no matching input or forms found.");
+      }
+    });
+  });
+</script>
+<!-- PDC Animation Library-->
+<script
+  async
+  src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"
+></script>
+<script
+  async
+  src="https://cdn.jsdelivr.net/gh/athesing-point/gsap-animations@1f2c749d/animations.min.js"
+></script>
+<script
+  async
+  src="https://cdn.jsdelivr.net/gh/TO-Point/utm-persistence@a9c0c24/index.min.js"
+></script>
+<!-- Google Tag Manager -->
+<script>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != "dataLayer" ? "&l=" + l : "";
+    j.async = true;
+    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, "script", "dataLayer", "GTM-53X7Z9W");
+</script>
+<!-- End Google Tag Manager -->

@@ -1,0 +1,132 @@
+<link rel="preconnect" href="//transcend-cdn.com" />
+<script
+  data-cfasync="false"
+  data-prompt="auto"
+  src="https://transcend-cdn.com/cm/783c6dfa-dd83-4431-8047-e3a521ffa71a/airgap.js"
+></script>
+<link rel="preconnect" href="//cdn.prod.website-files.com" />
+<link rel="preconnect" href="//cdn.jsdelivr.net" />
+<link rel="preconnect" href="//w.chatlio.com" />
+<link rel="preconnect" href="//app.posthog.com" />
+<link rel="preconnect" href="//www.googletagmanager.com" />
+
+<!-- Check to ensure proper version of posthog is being loaded before a deploy -->
+
+<!-- Prod Posthog-->
+<script>
+  !(function (t, e) {
+    var o, n, p, r;
+    e.__SV ||
+      ((window.posthog = e),
+      (e._i = []),
+      (e.init = function (i, s, a) {
+        function g(t, e) {
+          var o = e.split(".");
+          2 == o.length && ((t = t[o[0]]), (e = o[1])),
+            (t[e] = function () {
+              t.push([e].concat(Array.prototype.slice.call(arguments, 0)));
+            });
+        }
+        ((p = t.createElement("script")).type = "text/javascript"),
+          (p.async = !0),
+          (p.src = s.api_host + "/static/array.js"),
+          (r = t.getElementsByTagName("script")[0]).parentNode.insertBefore(
+            p,
+            r
+          );
+        var u = e;
+        for (
+          void 0 !== a ? (u = e[a] = []) : (a = "posthog"),
+            u.people = u.people || [],
+            u.toString = function (t) {
+              var e = "posthog";
+              return (
+                "posthog" !== a && (e += "." + a), t || (e += " (stub)"), e
+              );
+            },
+            u.people.toString = function () {
+              return u.toString(1) + ".people (stub)";
+            },
+            o =
+              "capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys".split(
+                " "
+              ),
+            n = 0;
+          n < o.length;
+          n++
+        )
+          g(u, o[n]);
+        e._i.push([i, s, a]);
+      }),
+      (e.__SV = 1));
+  })(document, window.posthog || []);
+  posthog.init("phc_xJEaj6NvK5QPhXzkeUhK7cgtisovAEKhkvlC6kAuuXP", {
+    api_host: "https://app.posthog.com",
+  });
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: "posthogLoaded" });
+</script>
+
+<meta name="format-detection" content="telephone=no" />
+<!-- Do not delete | Global Styles that shouldn't render in the designer and will only display on the published site -->
+<style>
+  .navbar_component_updated {
+    opacity: 0;
+  }
+  .nav-toast {
+    opacity: 0;
+  }
+  [data-anim="fadeIn"] {
+    opacity: 0;
+  }
+  [data-anim="slideUp"] {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  [data-anim="slideDown"] {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  [data-anim="slideLeft"] {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  [data-anim="slideRight"] {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  [data-anim] {
+    will-change: transform, opacity;
+  }
+  [data-anim="fadeIn"] {
+    opacity: 0;
+  }
+  [data-anim="slideUp"] {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  [data-anim="slideDown"] {
+    opacity: 0;
+    transform: translateY(-2rem);
+  }
+  [data-anim="slideLeft"] {
+    opacity: 0;
+    transform: translateX(-2rem);
+  }
+  [data-anim="slideRight"] {
+    opacity: 0;
+    transform: translateX(2rem);
+  }
+  [data-anim="scaleIn"] {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  [data-anim] {
+    will-change: transform, opacity;
+  }
+  noscript ~ * [data-anim] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+</style>

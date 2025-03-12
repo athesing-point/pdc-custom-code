@@ -5,6 +5,18 @@
     // Get the element with the 'transcend-opt-out' id
     const optOutElement = document.getElementById("transcend-opt-out");
 
+    // Check if the element exists before proceeding
+    if (!optOutElement) {
+      console.warn("'TOO' element is missing on the page.");
+      return;
+    }
+
+    // Check if airgap and transcend are initialized
+    if (typeof airgap === "undefined" || typeof transcend === "undefined") {
+      console.warn("Airgap or Transcend is not initialized on the page.");
+      return;
+    }
+
     // Hide the element by default
     optOutElement.style.display = "none";
 

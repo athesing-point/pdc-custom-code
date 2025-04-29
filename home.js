@@ -9,9 +9,19 @@ function onYouTubeIframeAPIReady() {
 
 function setupYouTubeEventListeners() {
   document.addEventListener("click", function (event) {
-    if (event.target.id === "openmodal1" || event.target.closest("#openmodal1")) {
+    if (
+      event.target.id === "openmodal1" ||
+      event.target.closest("#openmodal1") ||
+      event.target.classList.contains("modal1") ||
+      event.target.closest(".modal1")
+    ) {
       handleModalOpen("player1", "scIZq2PPzU0");
-    } else if (event.target.id === "openmodal2" || event.target.closest("#openmodal2")) {
+    } else if (
+      event.target.id === "openmodal2" ||
+      event.target.closest("#openmodal2") ||
+      event.target.classList.contains("modal2") ||
+      event.target.closest(".modal2")
+    ) {
       handleModalOpen("player2", "SKcxYIl-tT8");
     } else if (event.target.closest("#modal1 .close-button-wrapper")) {
       if (player1) {
@@ -35,7 +45,10 @@ function handleModalOpen(playerId, videoId) {
       return;
     }
 
-    if ((playerId === "player1" && !player1) || (playerId === "player2" && !player2)) {
+    if (
+      (playerId === "player1" && !player1) ||
+      (playerId === "player2" && !player2)
+    ) {
       var player = new YT.Player(playerId, {
         height: "100%",
         width: "100%",
@@ -144,7 +157,7 @@ function initFAQSchema() {
     var faqPage = {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": [],
+      mainEntity: [],
     };
     faqItems.forEach(function (item) {
       var question = item.querySelector("h4");
@@ -153,7 +166,10 @@ function initFAQSchema() {
         // Get text content outside of elements with the class 'buttons'
         var textNodes = [];
         answerContainer.childNodes.forEach(function (node) {
-          if (node.nodeType === Node.TEXT_NODE || !node.classList.contains("buttons")) {
+          if (
+            node.nodeType === Node.TEXT_NODE ||
+            !node.classList.contains("buttons")
+          ) {
             textNodes.push(node.textContent.trim());
           }
         });
@@ -162,10 +178,10 @@ function initFAQSchema() {
 
         faqPage.mainEntity.push({
           "@type": "Question",
-          "name": question.textContent.trim(),
-          "acceptedAnswer": {
+          name: question.textContent.trim(),
+          acceptedAnswer: {
             "@type": "Answer",
-            "text": answerText,
+            text: answerText,
           },
         });
       }

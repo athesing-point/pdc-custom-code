@@ -1,5 +1,4 @@
-/* Essential layout and performance styles */
-.hero-grid-img {
+Essential layout and performance styles .hero-grid-img {
   will-change: transform, opacity;
   opacity: 0;
   transform: translateY(30px);
@@ -76,6 +75,34 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Checklist layout styles */
+.hero-checks .rtf-checklists ul {
+  display: flex;
+  justify-content: flex-start;
+  gap: 2rem;
+  padding-left: 0;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .hero-checks .rtf-checklists ul {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .hero-checks .rtf-checklists ul li {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 479px) {
+  .hero-checks .rtf-checklists ul {
+    align-items: center;
   }
 }
 

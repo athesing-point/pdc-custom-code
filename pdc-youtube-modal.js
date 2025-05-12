@@ -127,7 +127,7 @@ function handleModalOpen(playerId, videoId) {
       },
       events: {
         onReady: onPlayerReady,
-        // onError: onPlayerError, // Optional: Add error handling if needed
+        onError: onPlayerError, // Add error handling
       },
     });
     // Assign the newly created player to the correct global variable
@@ -185,31 +185,36 @@ function onPlayerReady(event) {
 }
 
 // Optional: Add error handler function
-// function onPlayerError(event) {
-//   console.error("YouTube Player Error:", event.data, "for player:", event.target.getIframe().id);
-//   // You might want to destroy the player on certain errors
-//   // destroyPlayer(event.target.getIframe().id);
-// }
+function onPlayerError(event) {
+  console.error(
+    "YouTube Player Error:",
+    event.data,
+    "for player:",
+    event.target.getIframe().id
+  );
+  // You might want to destroy the player on certain errors
+  destroyPlayer(event.target.getIframe().id);
+}
 
 // Optional: Helper function to destroy player cleanly
-// function destroyPlayer(playerId) {
-//   let playerToDestroy = (playerId === 'player1') ? player1 : player2;
-//   if (playerToDestroy && typeof playerToDestroy.destroy === 'function') {
-//     try {
-//       playerToDestroy.destroy();
-//       console.log("Destroyed player:", playerId);
-//     } catch (e) {
-//       console.error("Error destroying player:", playerId, e);
-//     }
-//   }
-//   if (playerId === 'player1') {
-//     player1 = null;
-//     lastTime1 = 0;
-//   } else {
-//     player2 = null;
-//     lastTime2 = 0;
-//   }
-// }
+function destroyPlayer(playerId) {
+  let playerToDestroy = playerId === "player1" ? player1 : player2;
+  if (playerToDestroy && typeof playerToDestroy.destroy === "function") {
+    try {
+      playerToDestroy.destroy();
+      console.log("Destroyed player:", playerId);
+    } catch (e) {
+      console.error("Error destroying player:", playerId, e);
+    }
+  }
+  if (playerId === "player1") {
+    player1 = null;
+    lastTime1 = 0;
+  } else {
+    player2 = null;
+    lastTime2 = 0;
+  }
+}
 
 // Load YouTube API
 function loadYouTubeAPI() {

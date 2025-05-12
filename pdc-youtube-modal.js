@@ -9,9 +9,14 @@ function onYouTubeIframeAPIReady() {
 
 function setupYouTubeEventListeners() {
   document.addEventListener("click", function (event) {
+    console.log("Document clicked. Target:", event.target); // Debug log
+
     // Use closest for all checks for consistency and broader matching
     const openModal1Target = event.target.closest("#openmodal1, .modal1");
     const openModal2Target = event.target.closest("#openmodal2, .modal2");
+    console.log("openModal1Target:", openModal1Target); // Debug log
+    console.log("openModal2Target:", openModal2Target); // Debug log
+
     const closeModal1Target = event.target.closest(
       "#modal1 .close-button-wrapper"
     );
@@ -20,8 +25,14 @@ function setupYouTubeEventListeners() {
     );
 
     if (openModal1Target) {
+      console.log(
+        "Match for openModal1Target. Calling handleModalOpen for player1."
+      ); // Debug log
       handleModalOpen("player1", "scIZq2PPzU0");
     } else if (openModal2Target) {
+      console.log(
+        "Match for openModal2Target. Calling handleModalOpen for player2."
+      ); // Debug log
       handleModalOpen("player2", "SKcxYIl-tT8");
     } else if (closeModal1Target) {
       // Try to pause player 1 safely
@@ -69,6 +80,8 @@ function setupYouTubeEventListeners() {
         // Optional: Consider destroying player2
         // if (player2 && typeof player2.destroy === 'function') try { player2.destroy(); player2 = null; } catch(e){}
       }
+    } else {
+      console.log("No relevant modal target found for click."); // Debug log
     }
   });
 }

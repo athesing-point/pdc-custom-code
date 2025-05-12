@@ -1,281 +1,250 @@
-// YouTube Modal Manager - Improved version with debug logging
-(function () {
-  "use strict";
+// Rebuilt Youtube embeds removing Jquery dependency
+var player1, player2;
+var lastTime1 = 0,
+  lastTime2 = 0;
 
-  // Configuration
-  const CONFIG = {
-    videos: {
-      player1: "scIZq2PPzU0",
-      player2: "SKcxYIl-tT8",
-    },
-    selectors: {
-      modal1: "#openmodal1, .modal1",
-      modal2: "#openmodal2, .modal2",
-      closeButton1: "#modal1 .close-button-wrapper",
-      closeButton2: "#modal2 .close-button-wrapper",
-    },
-    playerDefaults: {
+function onYouTubeIframeAPIReady() {
+  setupYouTubeEventListeners();
+}
+
+function setupYouTubeEventListeners() {
+  document.addEventListener("click", function (event) {
+    // REMOVED console.log("Document clicked. Target:", event.target); // Debug log
+
+    // Use closest for all checks for consistency and broader matching
+    const openModal1Target = event.target.closest("#openmodal1, .modal1");
+    const openModal2Target = event.target.closest("#openmodal2, .modal2");
+    // REMOVED console.log("openModal1Target:", openModal1Target); // Debug log
+    // REMOVED console.log("openModal2Target:", openModal2Target); // Debug log
+
+    const closeModal1Target = event.target.closest(
+      "#modal1 .close-button-wrapper"
+    );
+    const closeModal2Target = event.target.closest(
+      "#modal2 .close-button-wrapper"
+    );
+
+    if (openModal1Target) {
+      console.log(
+        "Modal 1 Open Target Clicked:",
+        openModal1Target,
+        "\nCalling handleModalOpen for player1."
+      ); // Debug log
+      handleModalOpen("player1", "scIZq2PPzU0");
+    } else if (openModal2Target) {
+      console.log(
+        "Modal 2 Open Target Clicked:",
+        openModal2Target,
+        "\nCalling handleModalOpen for player2."
+      ); // Debug log
+      handleModalOpen("player2", "SKcxYIl-tT8");
+    } else if (closeModal1Target) {
+      console.log("Modal 1 Close Target Clicked:", closeModal1Target); // Debug log
+      // Try to pause player 1 safely, then wait 100ms before dispatching event
+      pauseAndDispatch(
+        "player1",
+        player1,
+        document.getElementById("modal1"),
+        function () {
+          if (typeof player1.getCurrentTime === "function") {
+            try {
+              lastTime1 = player1.getCurrentTime();
+            } catch (e) {
+              console.warn("Error getting current time for player1:", e);
+            }
+          }
+        }
+      );
+    } else if (closeModal2Target) {
+      console.log("Modal 2 Close Target Clicked:", closeModal2Target); // Debug log
+      // Try to pause player 2 safely, then wait 100ms before dispatching event
+      pauseAndDispatch(
+        "player2",
+        player2,
+        document.getElementById("modal2"),
+        function () {
+          if (typeof player2.getCurrentTime === "function") {
+            try {
+              lastTime2 = player2.getCurrentTime();
+            } catch (e) {
+              console.warn("Error getting current time for player2:", e);
+            }
+          }
+        }
+      );
+    } else {
+      // console.log("No relevant modal target found for click."); // No longer needed if we only log modal clicks
+    }
+  });
+}
+
+function handleModalOpen(playerId, videoId) {
+  var playerDiv = document.getElementById(playerId);
+  if (!playerDiv) {
+    console.error("Player div not found:", playerId);
+    return;
+  }
+
+  let targetPlayer;
+  let targetLastTime;
+
+  // Determine which player and lastTime to use
+  if (playerId === "player1") {
+    targetPlayer = player1;
+    targetLastTime = lastTime1;
+  } else {
+    // Assumes playerId === "player2"
+    targetPlayer = player2;
+    targetLastTime = lastTime2;
+  }
+
+  if (!targetPlayer) {
+    // Create player if it doesn't exist for this ID
+    console.log("Creating new player:", playerId);
+    var player = new YT.Player(playerId, {
       height: "100%",
       width: "100%",
+      videoId: videoId,
       playerVars: {
         rel: 0,
         modestbranding: 1,
         autoplay: 1,
-      },
-    },
-  };
-
-  // State management
-  const PlayerState = {
-    players: new Map(),
-    times: new Map(),
-
-    getPlayer(id) {
-      return this.players.get(id);
-    },
-
-    setPlayer(id, player) {
-      console.log(`Setting player for ${id}`); // Debug log
-      this.players.set(id, player);
-    },
-
-    getTime(id) {
-      const time = this.times.get(id) || 0;
-      console.log(`Getting time for ${id}:`, time); // Debug log
-      return time;
-    },
-
-    setTime(id, time) {
-      console.log(`Setting time for ${id}:`, time); // Debug log
-      this.times.set(id, Math.floor(time || 0));
-    },
-
-    removePlayer(id) {
-      console.log(`Removing player ${id}`); // Debug log
-      this.players.delete(id);
-      this.times.delete(id);
-    },
-  };
-
-  // Safe execution wrapper
-  function safeExecute(fn, fallback = null) {
-    try {
-      return fn();
-    } catch (error) {
-      console.error("Operation failed:", error);
-      return fallback;
-    }
-  }
-
-  // Player management
-  function createPlayer(playerId, videoId) {
-    console.log(`Creating new player: ${playerId} for video: ${videoId}`); // Debug log
-
-    const existingPlayer = PlayerState.getPlayer(playerId);
-    if (existingPlayer) {
-      console.log(`Destroying existing player: ${playerId}`); // Debug log
-      safeExecute(() => existingPlayer.destroy());
-      PlayerState.removePlayer(playerId);
-    }
-
-    const player = new YT.Player(playerId, {
-      ...CONFIG.playerDefaults,
-      videoId: videoId,
-      playerVars: {
-        ...CONFIG.playerDefaults.playerVars,
-        start: PlayerState.getTime(playerId),
+        start: Math.floor(targetLastTime || 0), // Use specific lastTime, ensure it's a number (default to 0)
       },
       events: {
         onReady: onPlayerReady,
-        onError: (event) => onPlayerError(event, playerId),
+        onError: onPlayerError, // Add error handling
       },
     });
-
-    PlayerState.setPlayer(playerId, player);
-    return player;
-  }
-
-  function handlePlayerOperation(playerId, operation) {
-    console.log(`Attempting operation: ${operation} on player: ${playerId}`); // Debug log
-    const player = PlayerState.getPlayer(playerId);
-    if (!player || typeof player[operation] !== "function") {
-      console.warn(`Invalid player or operation: ${playerId} - ${operation}`);
-      return false;
-    }
-    return safeExecute(() => player[operation]());
-  }
-
-  // Event handlers
-  function handleModalOpen(playerId, videoId) {
-    console.log(`Modal open requested for ${playerId}`); // Debug log
-
-    const playerDiv = document.getElementById(playerId);
-    if (!playerDiv) {
-      console.error("Player div not found:", playerId);
-      return;
-    }
-
-    const existingPlayer = PlayerState.getPlayer(playerId);
-    if (existingPlayer) {
-      console.log(`Resuming existing player: ${playerId}`); // Debug log
-      safeExecute(() => {
-        const currentTime = PlayerState.getTime(playerId);
-        console.log(`Seeking to time: ${currentTime}`); // Debug log
-        existingPlayer.seekTo(currentTime);
-        existingPlayer.playVideo();
-      });
+    // Assign the newly created player to the correct global variable
+    if (playerId === "player1") {
+      player1 = player;
     } else {
-      console.log(`No existing player found, creating new one: ${playerId}`); // Debug log
-      createPlayer(playerId, videoId);
+      player2 = player;
     }
-  }
-
-  function handleModalClose(playerId) {
-    console.log(`Modal close requested for ${playerId}`); // Debug log
-
-    const player = PlayerState.getPlayer(playerId);
-    if (!player) {
-      console.warn(`No player found to close: ${playerId}`);
-      return;
-    }
-
-    safeExecute(() => {
-      if (typeof player.getCurrentTime === "function") {
-        const currentTime = player.getCurrentTime();
-        console.log(`Saving current time for ${playerId}:`, currentTime); // Debug log
-        PlayerState.setTime(playerId, currentTime);
+  } else {
+    // Player already exists, try to resume
+    console.log("Resuming existing player:", playerId);
+    // Check if methods exist before calling. Player might exist but not be ready.
+    if (
+      typeof targetPlayer.seekTo === "function" &&
+      typeof targetPlayer.playVideo === "function"
+    ) {
+      try {
+        targetPlayer.seekTo(Math.floor(targetLastTime || 0)); // Ensure seek time is a number
+        targetPlayer.playVideo();
+      } catch (e) {
+        console.error("Error resuming player:", playerId, e);
+        // Optional: Consider destroying and recreating if resume fails
+        // destroyPlayer(playerId); handleModalOpen(playerId, videoId); // Be careful with recursion
       }
-      if (typeof player.pauseVideo === "function") {
-        console.log(`Pausing video for ${playerId}`); // Debug log
-        player.pauseVideo();
-      }
-    });
-  }
-
-  const handleModalClick = (event) => {
-    const target = event.target;
-
-    // Modal opening logic
-    if (target.closest(CONFIG.selectors.modal1)) {
-      console.log(
-        "Modal 1 Open Target Clicked:",
-        target.closest(CONFIG.selectors.modal1)
-      ); // Debug log
-      handleModalOpen("player1", CONFIG.videos.player1);
-    } else if (target.closest(CONFIG.selectors.modal2)) {
-      console.log(
-        "Modal 2 Open Target Clicked:",
-        target.closest(CONFIG.selectors.modal2)
-      ); // Debug log
-      handleModalOpen("player2", CONFIG.videos.player2);
-    }
-
-    // Modal closing logic
-    if (target.closest(CONFIG.selectors.closeButton1)) {
-      console.log(
-        "Modal 1 Close Target Clicked:",
-        target.closest(CONFIG.selectors.closeButton1)
-      ); // Debug log
-      handleModalClose("player1");
-    } else if (target.closest(CONFIG.selectors.closeButton2)) {
-      console.log(
-        "Modal 2 Close Target Clicked:",
-        target.closest(CONFIG.selectors.closeButton2)
-      ); // Debug log
-      handleModalClose("player2");
-    }
-  };
-
-  // YouTube event handlers
-  function onPlayerReady(event) {
-    const player = event.target;
-    const playerId = player.getIframe().id;
-    console.log("Player ready:", playerId);
-
-    safeExecute(() => {
-      console.log(`Attempting to play video for ${playerId}`); // Debug log
-      player.playVideo();
-    });
-  }
-
-  function onPlayerError(event, playerId) {
-    console.error("YouTube Player Error:", {
-      playerId: playerId,
-      errorCode: event.data,
-      errorMessage: getYouTubeErrorMessage(event.data), // Added helper for error messages
-    });
-
-    const player = PlayerState.getPlayer(playerId);
-    if (player) {
-      console.log(`Cleaning up player after error: ${playerId}`); // Debug log
-      safeExecute(() => {
-        player.destroy();
-        PlayerState.removePlayer(playerId);
-      });
+    } else {
+      console.warn(
+        "Player exists but methods not available on resume attempt:",
+        playerId
+      );
+      // Could potentially queue the action or log for debugging
     }
   }
+}
 
-  // Helper function to get YouTube error messages
-  function getYouTubeErrorMessage(errorCode) {
-    const errorMessages = {
-      2: "Invalid parameter value",
-      5: "HTML5 player error",
-      100: "Video not found",
-      101: "Playback on other websites has been disabled by the video owner",
-      150: "Playback on other websites has been disabled by the video owner",
-    };
-    return errorMessages[errorCode] || "Unknown error";
+function onPlayerReady(event) {
+  console.log("Player ready:", event.target.getIframe().id);
+  // Autoplay is set in playerVars, but playVideo() can be a fallback.
+  // Check if playVideo function exists before calling, just in case.
+  if (event.target && typeof event.target.playVideo === "function") {
+    try {
+      event.target.playVideo();
+    } catch (e) {
+      console.error(
+        "Error calling playVideo in onPlayerReady for:",
+        event.target.getIframe().id,
+        e
+      );
+    }
+  } else {
+    console.warn(
+      "onPlayerReady: playVideo function not found for",
+      event.target
+    );
   }
+}
 
-  // Cleanup
-  function cleanup() {
-    console.log("Performing cleanup..."); // Debug log
-    PlayerState.players.forEach((player, id) => {
-      console.log(`Cleaning up player: ${id}`); // Debug log
-      safeExecute(() => {
-        if (player && typeof player.destroy === "function") {
-          player.destroy();
+// Optional: Add error handler function
+function onPlayerError(event) {
+  console.error(
+    "YouTube Player Error:",
+    event.data,
+    "for player:",
+    event.target.getIframe().id
+  );
+  // You might want to destroy the player on certain errors
+  destroyPlayer(event.target.getIframe().id);
+}
+
+// Optional: Helper function to destroy player cleanly
+function destroyPlayer(playerId) {
+  let playerToDestroy = playerId === "player1" ? player1 : player2;
+  if (playerToDestroy && typeof playerToDestroy.destroy === "function") {
+    try {
+      playerToDestroy.destroy();
+      console.log("Destroyed player:", playerId);
+    } catch (e) {
+      console.error("Error destroying player:", playerId, e);
+    }
+  }
+  if (playerId === "player1") {
+    player1 = null;
+    lastTime1 = 0;
+  } else {
+    player2 = null;
+    lastTime2 = 0;
+  }
+}
+
+// Load YouTube API
+function loadYouTubeAPI() {
+  if (!window.YT) {
+    var tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  } else {
+    onYouTubeIframeAPIReady();
+  }
+}
+
+// Call this function to load the YouTube API
+loadYouTubeAPI();
+
+// Add this helper function near the bottom of the file, before loadYouTubeAPI
+function pauseAndDispatch(playerId, playerObj, modalElem, afterPauseCb) {
+  if (playerObj && typeof playerObj.pauseVideo === "function") {
+    try {
+      playerObj.pauseVideo();
+      if (typeof afterPauseCb === "function") afterPauseCb();
+      setTimeout(function () {
+        if (modalElem) {
+          const event = new CustomEvent("youtube-modal-paused", {
+            detail: { playerId },
+          });
+          modalElem.dispatchEvent(event);
         }
-      });
-    });
-    PlayerState.players.clear();
-    PlayerState.times.clear();
-    console.log("Cleanup complete"); // Debug log
-  }
-
-  // Setup and initialization
-  function setupEventListeners() {
-    console.log("Setting up event listeners"); // Debug log
-    document.addEventListener("click", handleModalClick);
-    window.addEventListener("unload", cleanup);
-  }
-
-  function loadYouTubeAPI() {
-    console.log("Loading YouTube API..."); // Debug log
-    if (!window.YT) {
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName("script")[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      console.log("YouTube API script tag added"); // Debug log
-    } else {
-      console.log("YouTube API already loaded"); // Debug log
-      setupEventListeners();
+      }, 100);
+    } catch (e) {
+      console.error(`Error pausing ${playerId}:`, e);
     }
+  } else {
+    console.warn(
+      `Could not pause ${playerId} on close (not ready or does not exist).`
+    );
+    setTimeout(function () {
+      if (modalElem) {
+        const event = new CustomEvent("youtube-modal-paused", {
+          detail: { playerId },
+        });
+        modalElem.dispatchEvent(event);
+      }
+    }, 100);
   }
-
-  // Initialize
-  function init() {
-    console.log("Initializing YouTube Modal Manager"); // Debug log
-    loadYouTubeAPI();
-  }
-
-  // Export necessary functions
-  window.onYouTubeIframeAPIReady = function () {
-    console.log("YouTube IFrame API Ready"); // Debug log
-    setupEventListeners();
-  };
-
-  // Start the application
-  init();
-})();
+}

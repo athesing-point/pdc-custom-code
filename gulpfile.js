@@ -13,7 +13,6 @@ function bundleJS() {
     .pipe(source("home.js"))
     .pipe(buffer())
     .pipe(terser())
-    .pipe(rename({ suffix: ".min" }))
     .pipe(gulp.dest("./min"));
 }
 

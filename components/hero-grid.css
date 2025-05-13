@@ -85,7 +85,6 @@
   transition: opacity 0.3s ease;
 }
 
-.modal1:hover .hero-grid-video-overlay,
-.modal2:hover .hero-grid-video-overlay {
+.video-trigger:hover .hero-grid-video-overlay {
   opacity: 0;
 }

@@ -1,3 +1,11 @@
+/**
+ * FFEP Integration
+ * Latest version available at: https://github.com/athesing-point/ffep-v2
+ *
+ * This file handles the FFEP (Flexible Form Entry Point) integration.
+ * For the most up-to-date implementation, please refer to the GitHub repository.
+ */
+
 window.onSubmitFfepForm = function (address) {
   // Do event handling here vvv
   console.log("FFEP form submitted", address);

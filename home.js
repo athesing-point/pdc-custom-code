@@ -1,5 +1,6 @@
-// Remove dynamic import attempt since we're bundling directly
-require("./video-modal/youtube-modal.js");
+// Import the YouTube modal code
+const YouTubeModal = require("./video-modal/youtube-modal.js");
+window.YouTubeModal = YouTubeModal;
 
 //Accessible Accordions & default open first item
 function initAccordions() {

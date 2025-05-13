@@ -1,10 +1,5 @@
-// Try to import as a module, fallback to global
-try {
-  import("./video-modal/youtube-modal.js");
-} catch (e) {
-  // Module import failed, script should be loaded globally
-  console.log("Using global YouTube modal");
-}
+// Remove dynamic import attempt since we're bundling directly
+require("./video-modal/youtube-modal.js");
 
 //Accessible Accordions & default open first item
 function initAccordions() {

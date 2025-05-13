@@ -1,5 +1,5 @@
 // Import the YouTube modal code
-const YouTubeModal = require("./video-modal/youtube-modal.js");
+const YouTubeModal = require("./video/video-modals.js");
 window.YouTubeModal = YouTubeModal;
 
 //Accessible Accordions & default open first item

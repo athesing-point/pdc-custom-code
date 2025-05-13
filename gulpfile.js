@@ -25,10 +25,13 @@ function minifyCSS() {
 }
 
 function watch() {
-  gulp.watch(["**/*.css", "!**/*.min.*", "!node_modules/**"], minifyCSS);
+  gulp.watch(
+    ["**/*.css", "!**/*.min.*", "!node_modules/**", "!min/**"],
+    minifyCSS
+  );
 
   gulp.watch(
-    ["**/*.js", "!**/*.min.*", "!node_modules/**", "!gulpfile.js"],
+    ["**/*.js", "!**/*.min.*", "!node_modules/**", "!gulpfile.js", "!min/**"],
     bundleJS
   );
 }

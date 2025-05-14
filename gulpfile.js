@@ -7,7 +7,8 @@ const browserify = require("browserify");
 const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
 
-function bundleJS() {
+// Bundle and minify home.js separately since it uses browserify
+function bundleHomeJS() {
   return browserify("home.js")
     .bundle()
     .pipe(source("home.js"))
@@ -16,9 +17,24 @@ function bundleJS() {
     .pipe(gulp.dest("./min"));
 }
 
+// Minify all other JS files while preserving directory structure
+function minifyJS() {
+  return gulp
+    .src([
+      "**/*.js",
+      "!home.js", // Exclude home.js as it's handled separately
+      "!**/*.min.*",
+      "!node_modules/**",
+      "!gulpfile.js",
+      "!min/**",
+    ])
+    .pipe(terser())
+    .pipe(gulp.dest("./min"));
+}
+
 function minifyCSS() {
   return gulp
-    .src(["**/*.css", "!**/*.min.*", "!node_modules/**"])
+    .src(["**/*.css", "!**/*.min.*", "!node_modules/**", "!min/**"])
     .pipe(cleanCSS())
     .pipe(rename({ suffix: ".min" }))
     .pipe(gulp.dest("./min"));
@@ -30,10 +46,22 @@ function watch() {
     minifyCSS
   );
 
+  gulp.watch(["home.js"], bundleHomeJS);
+
   gulp.watch(
-    ["**/*.js", "!**/*.min.*", "!node_modules/**", "!gulpfile.js", "!min/**"],
-    bundleJS
+    [
+      "**/*.js",
+      "!home.js",
+      "!**/*.min.*",
+      "!node_modules/**",
+      "!gulpfile.js",
+      "!min/**",
+    ],
+    minifyJS
   );
 }
 
-exports.default = gulp.series(gulp.parallel(minifyCSS, bundleJS), watch);
+exports.default = gulp.series(
+  gulp.parallel(minifyCSS, bundleHomeJS, minifyJS),
+  watch
+);

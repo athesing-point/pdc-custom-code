@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(function(){window.location.href.includes("?")&&(document.querySelectorAll('[data-is-landing="true"]').forEach((function(n){n.style.display="block"})),document.querySelectorAll('[data-is-landing="false"]').forEach((function(n){n.style.display="none"})))}));

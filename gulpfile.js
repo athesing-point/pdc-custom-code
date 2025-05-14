@@ -2,34 +2,37 @@ const gulp = require("gulp");
 const rename = require("gulp-rename");
 const cleanCSS = require("gulp-clean-css");
 const terser = require("gulp-terser");
-const gulpIf = require("gulp-if");
 const browserify = require("browserify");
 const source = require("vinyl-source-stream");
 const buffer = require("vinyl-buffer");
+const glob = require("glob");
+const path = require("path");
+const through2 = require("through2");
 
-// Bundle and minify home.js separately since it uses browserify
-function bundleHomeJS() {
-  return browserify("home.js")
-    .bundle()
-    .pipe(source("home.js"))
-    .pipe(buffer())
-    .pipe(terser())
-    .pipe(gulp.dest("./min"));
+// Process all JS files with browserify
+function bundleJS() {
+  // Find all JS files except those in node_modules, min directory, and gulpfile.js
+  return through2.obj((file, enc, next) => {
+    browserify(file.path)
+      .bundle()
+      .pipe(source(path.basename(file.path)))
+      .pipe(buffer())
+      .pipe(terser())
+      .pipe(gulp.dest(path.join("min", path.dirname(file.relative))))
+      .on("end", next);
+  });
 }
 
-// Minify all other JS files while preserving directory structure
-function minifyJS() {
+function processJS() {
   return gulp
     .src([
       "**/*.js",
-      "!home.js", // Exclude home.js as it's handled separately
       "!**/*.min.*",
       "!node_modules/**",
       "!gulpfile.js",
       "!min/**",
     ])
-    .pipe(terser())
-    .pipe(gulp.dest("./min"));
+    .pipe(bundleJS());
 }
 
 function minifyCSS() {
@@ -46,22 +49,10 @@ function watch() {
     minifyCSS
   );
 
-  gulp.watch(["home.js"], bundleHomeJS);
-
   gulp.watch(
-    [
-      "**/*.js",
-      "!home.js",
-      "!**/*.min.*",
-      "!node_modules/**",
-      "!gulpfile.js",
-      "!min/**",
-    ],
-    minifyJS
+    ["**/*.js", "!**/*.min.*", "!node_modules/**", "!gulpfile.js", "!min/**"],
+    processJS
   );
 }
 
-exports.default = gulp.series(
-  gulp.parallel(minifyCSS, bundleHomeJS, minifyJS),
-  watch
-);
+exports.default = gulp.series(gulp.parallel(minifyCSS, processJS), watch);

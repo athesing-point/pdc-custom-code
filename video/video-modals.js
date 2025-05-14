@@ -110,10 +110,15 @@ document.addEventListener("keydown", (e) => {
 // Initialize the system
 setupModalEventListeners();
 
-// Export the module
+// Create the HTML5VideoModal object
 const HTML5VideoModal = {
   openModal,
   closeModal,
 };
 
-module.exports = HTML5VideoModal;
+// Export in a way that works in both browser and module environments
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = HTML5VideoModal;
+} else if (typeof window !== "undefined") {
+  window.HTML5VideoModal = HTML5VideoModal;
+}

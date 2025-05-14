@@ -41,13 +41,23 @@ function openModal(modalId) {
 
   // Set or update video src if needed
   const config = modalConfig[modalId];
-  const videoElement = modalElement.querySelector("video");
-  if (videoElement && config) {
-    if (videoElement.src !== config.videoSrc) {
-      videoElement.src = config.videoSrc;
+  const videoContainer = document.getElementById(config.videoId);
+  if (videoContainer) {
+    const videoElement = videoContainer.querySelector("video");
+    const sourceElement = videoContainer.querySelector("source");
+
+    if (videoElement && sourceElement) {
+      // Only set source if it hasn't been set yet
+      if (!sourceElement.src) {
+        videoElement.preload = "none";
+        sourceElement.src = config.videoSrc;
+        sourceElement.type = "video/mp4";
+        videoElement.load();
+      }
+
+      // Resume playback
+      videoElement.play();
     }
-    videoElement.currentTime = 0;
-    videoElement.play();
   }
 
   // Reset display property and prepare for animation
@@ -68,11 +78,14 @@ function closeModal(modalId) {
   const modalElement = document.querySelector(`[modal="${modalId}"]`);
   if (!modalElement) return;
 
-  // Pause and reset video
-  const videoElement = modalElement.querySelector("video");
-  if (videoElement) {
-    videoElement.pause();
-    videoElement.currentTime = 0;
+  // Pause video
+  const config = modalConfig[modalId];
+  const videoContainer = document.getElementById(config.videoId);
+  if (videoContainer) {
+    const videoElement = videoContainer.querySelector("video");
+    if (videoElement) {
+      videoElement.pause();
+    }
   }
 
   // Animate modal closing
